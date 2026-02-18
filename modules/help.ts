@@ -63,7 +63,13 @@ module.exports = {
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + "```Invalid Command. Check the correct name from```  *.help*  ```command list.```", MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            const suggestion = inputSanitization.getClosestCommand(args[0], Array.from(commandHandler.keys()));
+            let errorMessage = HELP.COMMAND_INTERFACE + "```Invalid Command. ";
+            if (suggestion) {
+                errorMessage += "Did you mean``` *." + suggestion + "* ```? ";
+            }
+            errorMessage += "Check the correct name from```  *.help*  ```command list.```";
+            client.sendMessage(BotsApp.chatId, errorMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
         } catch (err) {
             await inputSanitization.handleError(err, client, BotsApp);
         }

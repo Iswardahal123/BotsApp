@@ -14,6 +14,7 @@ import Blacklist from './database/blacklist'
 import clearance from './core/clearance'
 import { start } from 'repl'
 import format from 'string-format';
+import inputSanitization from './sidekick/input-sanitization';
 import resolve from './core/helper'
 import { Sequelize } from 'sequelize/types'
 import Command from './sidekick/command'
@@ -183,7 +184,12 @@ setInterval(() => {
                             const command = commandHandler.get(BotsApp.commandName);
                             var args = BotsApp.body.trim().split(/\s+/).slice(1);
                             if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                const suggestion = inputSanitization.getClosestCommand(BotsApp.commandName, Array.from(commandHandler.keys()));
+                                if (suggestion) {
+                                    client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Did you mean``` *." + suggestion + "* ```? Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                } else {
+                                    client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                }
                                 return;
                             } else if (command && BotsApp.commandName == "help") {
                                 try {
