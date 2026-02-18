@@ -362,6 +362,13 @@ const data = {
         NOT_FOUND: "```Term``` *{}* ```Not Found!```",
         PROCESSING: "```Searching. Please wait....```",
     },
+    ai: {
+        DESCRIPTION: "AI Assistant Chatbot",
+        EXTENDED_DESCRIPTION:
+            "```Use this module to chat with an AI assistant. Enter```  *.ai <message>*  ```to get a response.```",
+        NO_ARG: "```Please enter a message to chat with the AI.```",
+        PROCESSING: "```Thinking...```",
+    },
     unblock: {
         DESCRIPTION: "Unblock contact",
         EXTENDED_DESCRIPTION: "```Remove number from the blocklist.```",

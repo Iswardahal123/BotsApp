@@ -549,11 +549,6 @@
   resolved "https://registry.npmjs.org/@types/string-format/-/string-format-2.0.0.tgz#c1588f507be7b8ef5eb5074a41e48e4538f3f6d5"
   integrity sha512-mMwtmgN0ureESnJ3SuMM4W9lsi4CgOxs43YxNo14SDHgzJ+OPYO3yM7nOTJTh8x5YICseBdtrySUbvxnpb+NYQ==
 
-"@types/urban-dictionary@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@types/urban-dictionary/-/urban-dictionary-3.0.0.tgz#6a10f692fd872b03758bcde3308ec6791c567a15"
-  integrity sha512-zGc/rL7a11fSf98MsVKnTLQ0s3BukUrdHRWe4Hf4jj3psTVqBIibv7cKUF23We3qDn29/2mYeo56jLZjnm5ZzA==
-
 "@types/validator@^13.7.1":
   version "13.7.2"
   resolved "https://registry.npmjs.org/@types/validator/-/validator-13.7.2.tgz#a2114225d9be743fb154b06c29b8257aaca42922"
@@ -3729,11 +3724,6 @@ unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
-
-urban-dictionary@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/urban-dictionary/-/urban-dictionary-3.0.2.tgz#8028350dfd57e80a17b4fdac1cbc81f0672a38bc"
-  integrity sha512-hoYevSg6JNr8NiYRtxz7sqBDBu4RL52Bd45L2jQQ44Rwrz6ACmnKnRcUkH2TIQRILN+viZMT/MYYU3OyBz68AA==
 
 uri-js@^4.2.2:
   version "4.4.1"
