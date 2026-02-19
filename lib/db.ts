@@ -13,6 +13,7 @@ const data = {
             "```Looks like something went wrong. Need not worry. Here are some logs since when the bot was not responding as expected.```\n```---------```\n```🧐 Command:``` *{commandName}*\n```😎 From Me?:``` *{fromMe}*\n```🗣️ Was a reply?:``` *{isReply}*\n```👥 In a group?``` *{isGroup}*\n```📥 In Inbox?``` *{isPm}*\n```📸 Command with image?``` *{isImage}*\n```🕺🏻 Is Bot group admin?``` *{isBotGroupAdmin}*\n```📈 Was Sender group admin?``` *{isSenderGroupAdmin}*\n```🫂 Was sender sudo?``` *{isSenderSudo}*\n```⚠️ Error:``` \n*{err}*\n```---------```\n_To figure out what exactly went wrong, please report/raise the issue on our support chat at_ https://chat.whatsapp.com/GRPWL8TBVq91lQig9JoqME",
         SUCCESSFUL_CONNECTION:
             "*BotsApp successfuly integrated.*\n```Bot is currently working in``` *{worktype}* ```mode.```\n```For more information regarding Bot working and permissions check out:``` \n🔗https://github.com/Prince-Mendiratta/BotsApp.\n\n⚠️ The bot will not work in this chat.",
+        INVALID_COMMAND: "```Woops, invalid command! Did you mean``` *.{0}* ```? Use``` *.help* ```to display the command list.```",
     },
     abl: {
         DESCRIPTION: "Module to blacklist a person or a chat from using the bot.",
