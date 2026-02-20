@@ -18,6 +18,7 @@ import resolve from './core/helper'
 import { Sequelize } from 'sequelize/types'
 import Command from './sidekick/command'
 import BotsApp from './sidekick/sidekick'
+import inputSanitization from './sidekick/input-sanitization'
 import Client from './sidekick/client'
 import { MessageType } from './sidekick/message-type'
 
@@ -183,7 +184,12 @@ setInterval(() => {
                             const command = commandHandler.get(BotsApp.commandName);
                             var args = BotsApp.body.trim().split(/\s+/).slice(1);
                             if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                let closest = inputSanitization.getClosestCommand(BotsApp.commandName, Array.from(commandHandler.keys()));
+                                let msg = "```Woops, invalid command! Use```  *.help*  ```to display the command list.```";
+                                if (closest) {
+                                    msg += `\n\n*Did you mean* \` .${closest} \` *?*`;
+                                }
+                                client.sendMessage(BotsApp.chatId, msg, MessageType.text);
                                 return;
                             } else if (command && BotsApp.commandName == "help") {
                                 try {
