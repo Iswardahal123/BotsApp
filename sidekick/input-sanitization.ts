@@ -16,7 +16,7 @@ const ERROR_TEMPLATE = db.general.ERROR_TEMPLATE
 const getCleanedContact = async (args: string[], client: Client, BotsApp: BotsApp) => {
     var jidNumber = '';
     var countryCode = config.COUNTRY_CODE;
-    if (parseInt(args[0]) === NaN || args[0][0] === "+" || args[0][0] === "@") {
+    if (isNaN(parseInt(args[0])) || args[0][0] === "+" || args[0][0] === "@") {
         if (args[0][0] === "@" || args[0][0] === "+") {
             jidNumber = args[0].substring(1, args[0].length + 1);
         }
@@ -107,12 +107,30 @@ const saveBuffer = async (fileName: string, stream: Transform) => {
     await writeFile(fileName, buffer);
 }
 
+const getClosestCommand = (command: string, commands: string[]) => {
+    const lev = (a, b) => {
+        const m = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+        for (let j = 0; j <= a.length; j++) m[0][j] = j;
+        for (let i = 1; i <= b.length; i++)
+            for (let j = 1; j <= a.length; j++)
+                m[i][j] = b[i - 1] === a[j - 1] ? m[i - 1][j - 1] : Math.min(m[i - 1][j - 1] + 1, m[i][j - 1] + 1, m[i - 1][j] + 1);
+        return m[b.length][a.length];
+    };
+    let min = 3, closest;
+    for (const cmd of commands) {
+        const d = lev(command, cmd);
+        if (d < min) { min = d; closest = cmd; }
+    }
+    return closest;
+};
+
 const inputSanitization = {
     handleError: handleError,
     deleteFiles: deleteFiles,
     saveBuffer: saveBuffer,
     getCleanedContact: getCleanedContact,
-    isMember: isMember
+    isMember: isMember,
+    getClosestCommand: getClosestCommand
 }
 
 export default inputSanitization;
