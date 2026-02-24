@@ -6,6 +6,8 @@ const data = {
         NOT_A_GROUP: "```Command only applicable in a group chat.```",
         BOT_NOT_ADMIN:
             "```Sorry, don't have permission to do so since I am not an admin.```",
+        INVALID_COMMAND:
+            "```Woops, invalid command! Did you mean``` *.{}*? \n```Use``` *.help* ```to display the command list.```",
         ADMIN_PERMISSION: "```You need to be an admin to execute this command.```",
         SUDO_PERMISSION:
             "```Hey there, I am 💠BotsApp💠. I guess you were trying to use my commands in``` *{BotsApp.groupName}*```. However, the bot is currently in {worktype} mode. This enables only the owner and sudo users to use the command``` *{commandName}* ```.\n\nIf you are keen to use my features, you can deploy BotsApp on your own account without much effort, in less than 5 minutes! Check out the links given below.```\n\n🔗https://mybotsapp.com\n🔗https://github.com/Prince-Mendiratta/BotsApp",
