@@ -16,7 +16,7 @@ const ERROR_TEMPLATE = db.general.ERROR_TEMPLATE
 const getCleanedContact = async (args: string[], client: Client, BotsApp: BotsApp) => {
     var jidNumber = '';
     var countryCode = config.COUNTRY_CODE;
-    if (parseInt(args[0]) === NaN || args[0][0] === "+" || args[0][0] === "@") {
+    if (isNaN(parseInt(args[0])) || args[0][0] === "+" || args[0][0] === "@") {
         if (args[0][0] === "@" || args[0][0] === "+") {
             jidNumber = args[0].substring(1, args[0].length + 1);
         }
@@ -107,12 +107,42 @@ const saveBuffer = async (fileName: string, stream: Transform) => {
     await writeFile(fileName, buffer);
 }
 
+const levenshtein = (a: string, b: string): number => {
+    const arr = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+    for (let i = 0; i <= a.length; i++) arr[i][0] = i;
+    for (let j = 0; j <= b.length; j++) arr[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            arr[i][j] = Math.min(
+                arr[i - 1][j] + 1,
+                arr[i][j - 1] + 1,
+                arr[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+        }
+    }
+    return arr[a.length][b.length];
+};
+
+const getClosestCommand = (command: string, commands: string[]): string | null => {
+    let closest = null;
+    let minDistance = 3;
+    for (const cmd of commands) {
+        const distance = levenshtein(command, cmd);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closest = cmd;
+        }
+    }
+    return closest;
+};
+
 const inputSanitization = {
     handleError: handleError,
     deleteFiles: deleteFiles,
     saveBuffer: saveBuffer,
     getCleanedContact: getCleanedContact,
-    isMember: isMember
+    isMember: isMember,
+    getClosestCommand: getClosestCommand
 }
 
 export default inputSanitization;
