@@ -20,6 +20,7 @@ import Command from './sidekick/command'
 import BotsApp from './sidekick/sidekick'
 import Client from './sidekick/client'
 import { MessageType } from './sidekick/message-type'
+import inputSanitization from './sidekick/input-sanitization'
 
 const sequelize: Sequelize = config.DATABASE;
 const GENERAL: any = STRINGS.general;
@@ -183,7 +184,9 @@ setInterval(() => {
                             const command = commandHandler.get(BotsApp.commandName);
                             var args = BotsApp.body.trim().split(/\s+/).slice(1);
                             if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                const suggestion = inputSanitization.getClosestCommand(BotsApp.commandName, Array.from(commandHandler.keys()));
+                                const message = suggestion ? format(GENERAL.INVALID_COMMAND, suggestion) : "```Woops, invalid command! Use```  *.help*  ```to display the command list.```";
+                                client.sendMessage(BotsApp.chatId, message, MessageType.text);
                                 return;
                             } else if (command && BotsApp.commandName == "help") {
                                 try {
