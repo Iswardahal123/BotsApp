@@ -107,12 +107,30 @@ const saveBuffer = async (fileName: string, stream: Transform) => {
     await writeFile(fileName, buffer);
 }
 
+const getClosestCommand = (cmd: string, cmds: string[]) => {
+    const lev = (a: string, b: string): number => {
+        let d = Array.from({length: a.length + 1}, (_, i) => [i, ...Array(b.length).fill(0)]);
+        for (let j = 0; j <= b.length; j++) d[0][j] = j;
+        for (let i = 1; i <= a.length; i++)
+            for (let j = 1; j <= b.length; j++)
+                d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+        return d[a.length][b.length];
+    };
+    let best = null, min = 3;
+    for (const c of cmds) {
+        let dist = lev(cmd, c);
+        if (dist < min) { min = dist; best = c; }
+    }
+    return best;
+};
+
 const inputSanitization = {
     handleError: handleError,
     deleteFiles: deleteFiles,
     saveBuffer: saveBuffer,
     getCleanedContact: getCleanedContact,
-    isMember: isMember
+    isMember: isMember,
+    getClosestCommand: getClosestCommand
 }
 
 export default inputSanitization;
