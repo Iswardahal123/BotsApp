@@ -21,7 +21,8 @@ module.exports = {
             let helpMessage: string;
             if(!args[0]){
                 helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
+                const sortedCommands = Array.from(commandHandler.values()).sort((a, b) => a.name.localeCompare(b.name));
+                sortedCommands.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
