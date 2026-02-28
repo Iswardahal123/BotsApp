@@ -6,7 +6,6 @@ import Client from "../sidekick/client";
 import { proto } from "@adiwajshing/baileys";
 import BotsApp from "../sidekick/sidekick";
 import { MessageType } from "../sidekick/message-type";
-import ud from "urban-dictionary";
 
 module.exports = {
     name: "ud",
@@ -32,8 +31,13 @@ module.exports = {
                 text = args.join(" ");
             }
 
-            let Response = await ud.define(text);
-            console.log(Response);
+            const response: any = await got(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(text)}`).json();
+            const Response = response.list;
+
+            if (!Response || Response.length === 0) {
+                throw new Error("Term Not Found!");
+            }
+
             let result = Response.reduce(function (prev, current) {
                 return prev.thumbs_up + prev.thumbs_down >
                     current.thumbs_up + current.thumbs_down
