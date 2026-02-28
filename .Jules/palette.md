@@ -1,0 +1,3 @@
+## 2025-05-15 - Improving Bot Discoverability and Validation
+**Learning:** In command-line or bot interfaces, long un-sorted lists of commands hinder discoverability. Sorting alphabetically and providing a "Total Commands" summary helps users scan for what they need and understand the scope of the bot's capabilities. Additionally, common logic errors like `parseInt(x) === NaN` (which always returns false) silently break UX by failing to provide validation feedback to the user.
+**Action:** Always sort command lists alphabetically and provide a summary count in help menus. Verify numeric validation logic specifically uses `isNaN()` to ensure error messages are correctly triggered for invalid user input.
