@@ -44,7 +44,7 @@ module.exports = {
                     MessageType.text
                 ).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
-            } else if (parseInt(args[0]) === NaN) {
+            } else if (isNaN(parseInt(args[0]))) {
                 client.sendMessage(
                     BotsApp.chatId,
                     MUTE.MENTION_DURATION,
