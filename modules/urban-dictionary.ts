@@ -6,7 +6,7 @@ import Client from "../sidekick/client";
 import { proto } from "@adiwajshing/baileys";
 import BotsApp from "../sidekick/sidekick";
 import { MessageType } from "../sidekick/message-type";
-import ud from "urban-dictionary";
+// import ud from "urban-dictionary";
 
 module.exports = {
     name: "ud",
@@ -32,7 +32,8 @@ module.exports = {
                 text = args.join(" ");
             }
 
-            let Response = await ud.define(text);
+            const responseData: any = await got(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(text)}`).json();
+            const Response = responseData.list;
             console.log(Response);
             let result = Response.reduce(function (prev, current) {
                 return prev.thumbs_up + prev.thumbs_down >

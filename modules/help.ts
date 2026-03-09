@@ -16,24 +16,22 @@ module.exports = {
     demo: {isEnabled: false},
     async handle(client: Client, chat: proto.IWebMessageInfo, BotsApp: BotsApp, args: string[], commandHandler: Map<string, Command>): Promise<void> {
         try {
-            var prefixRegex: any = new RegExp(config.PREFIX, "g");
-            var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
+            const prefixes: string = config.PREFIX.replace(/[\\^\[\]]/g, "");
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
-                    helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
-                });
+                helpMessage = format(HELP.HEAD, commandHandler.size.toString());
+                Array.from(commandHandler.values())
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .forEach(element => {
+                        helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
+                    });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
             helpMessage = HELP.COMMAND_INTERFACE;
             var command: Command = commandHandler.get(args[0]);
             if(command){
-                var triggers: string = " | "
-                prefixes.split("").forEach(prefix => {
-                    triggers += prefix + command.name + " | "
-                });
+                const triggers: string = prefixes.split("").map(prefix => prefix + command.name).join(", ");
 
                 if(command.demo?.isEnabled) {
                     var buttons: proto.Message.ButtonsMessage.IButton[] = [];
