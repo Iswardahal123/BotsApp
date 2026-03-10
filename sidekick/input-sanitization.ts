@@ -16,16 +16,15 @@ const ERROR_TEMPLATE = db.general.ERROR_TEMPLATE
 const getCleanedContact = async (args: string[], client: Client, BotsApp: BotsApp) => {
     var jidNumber = '';
     var countryCode = config.COUNTRY_CODE;
-    if (parseInt(args[0]) === NaN || args[0][0] === "+" || args[0][0] === "@") {
-        if (args[0][0] === "@" || args[0][0] === "+") {
-            jidNumber = args[0].substring(1, args[0].length + 1);
-        }
-        else {
-            client.sendMessage(BotsApp.chatId,"*Enter valid contact number.* Approved Syntax:\n```1. XXXXXXXXXX``` \n```2. Tag the person``` \n```3. +(YYY)XXXXXXXXXX.``` \n_(YY- Country Code, without zeros)_", MessageType.text);
-            return undefined;
-        }
+    if (args[0][0] === "@" || args[0][0] === "+") {
+        jidNumber = args[0].substring(1);
     } else {
-        jidNumber = args[0];       
+        jidNumber = args[0];
+    }
+
+    if (isNaN(parseInt(jidNumber))) {
+        client.sendMessage(BotsApp.chatId,"*Enter valid contact number.* Approved Syntax:\n```1. XXXXXXXXXX``` \n```2. Tag the person``` \n```3. +(YYY)XXXXXXXXXX.``` \n_(YY- Country Code, without zeros)_", MessageType.text);
+        return undefined;
     }
 
     if (jidNumber.length < 8 || jidNumber.length > 13) {
