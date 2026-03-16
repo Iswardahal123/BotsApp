@@ -1,0 +1,3 @@
+## 2024-05-24 - Improved discoverability and feedback in Help command
+**Learning:** In text-based bot interfaces, information discoverability is crucial. Sorting command lists alphabetically and providing a total count helps users grasp the bot's scale and find what they need faster. Centralizing feedback messages with dynamic placeholders ensures consistency and allows for context-aware responses (like including the command prefix in error messages).
+**Action:** Always sort command/feature lists and provide summary counts. Use dynamic templates for error messages to provide actionable feedback that includes relevant context (e.g., correct syntax with the current prefix).
