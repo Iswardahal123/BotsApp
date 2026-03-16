@@ -20,8 +20,9 @@ module.exports = {
             var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
+                const sortedCommands = Array.from(commandHandler.values()).sort((a, b) => a.name.localeCompare(b.name));
+                helpMessage = format(HELP.HEAD, sortedCommands.length.toString());
+                sortedCommands.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
@@ -30,10 +31,11 @@ module.exports = {
             helpMessage = HELP.COMMAND_INTERFACE;
             var command: Command = commandHandler.get(args[0]);
             if(command){
-                var triggers: string = " | "
+                var triggersList: string[] = [];
                 prefixes.split("").forEach(prefix => {
-                    triggers += prefix + command.name + " | "
+                    triggersList.push(prefix + command.name);
                 });
+                var triggers: string = triggersList.join(", ");
 
                 if(command.demo?.isEnabled) {
                     var buttons: proto.Message.ButtonsMessage.IButton[] = [];
@@ -63,7 +65,7 @@ module.exports = {
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + "```Invalid Command. Check the correct name from```  *.help*  ```command list.```", MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + format(HELP.ERROR_MSG, prefixes[0]), MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
         } catch (err) {
             await inputSanitization.handleError(err, client, BotsApp);
         }
