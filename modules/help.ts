@@ -20,7 +20,7 @@ module.exports = {
             var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
+                helpMessage = format(HELP.HEAD, commandHandler.size.toString());
                 commandHandler.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
