@@ -1,0 +1,3 @@
+## 2025-05-15 - Improving Help Command UX and Environment Robustness
+**Learning:** Centralizing help headers and error messages with placeholders allows for a more dynamic and consistent user interface across different modules. Using `encodeURIComponent` and better regex-based prefix extraction makes the bot more resilient to various user inputs and configurations.
+**Action:** Use placeholder templates in `lib/db.ts` for all recurring messages and use the `string-format` library for dynamic injection of data. Ensure environment setups can handle unpublished or broken dependencies by gracefully removing them if they aren't essential.
