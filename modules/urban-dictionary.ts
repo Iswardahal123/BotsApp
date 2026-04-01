@@ -1,21 +1,20 @@
-import got from "got";
+import axios from "axios";
 import inputSanitization from "../sidekick/input-sanitization";
 import STRINGS from "../lib/db";
 import format from "string-format";
 import Client from "../sidekick/client";
 import { proto } from "@adiwajshing/baileys";
-import BotsApp from "../sidekick/sidekick";
+import Sidekick from "../sidekick/sidekick";
 import { MessageType } from "../sidekick/message-type";
-import ud from "urban-dictionary";
 
-module.exports = {
+export = {
     name: "ud",
     description: STRINGS.ud.DESCRIPTION,
     extendedDescription: STRINGS.ud.EXTENDED_DESCRIPTION,
     demo: { isEnabled: true, text: ".ud bruh" },
-    async handle(client: Client, chat: proto.IWebMessageInfo, BotsApp: BotsApp, args: string[]): Promise<void> {
+    async handle(client: Client, chat: proto.IWebMessageInfo, botsApp: Sidekick, args: string[]): Promise<void> {
         const processing = await client.sendMessage(
-            BotsApp.chatId,
+            botsApp.chatId,
             STRINGS.ud.PROCESSING,
             MessageType.text
         );
@@ -23,18 +22,23 @@ module.exports = {
             var text: string = "";
             if (args.length == 0) {
                 client.sendMessage(
-                    BotsApp.chatId,
+                    botsApp.chatId,
                     STRINGS.ud.NO_ARG,
                     MessageType.text
-                ).catch(err => inputSanitization.handleError(err, client, BotsApp));
+                ).catch(err => inputSanitization.handleError(err, client, botsApp));
                 return;
             } else {
                 text = args.join(" ");
             }
 
-            let Response = await ud.define(text);
-            console.log(Response);
-            let result = Response.reduce(function (prev, current) {
+            let response = await axios.get(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(text)}`);
+            let results = response.data.list;
+
+            if (!results || results.length === 0) {
+                throw new Error("No results found");
+            }
+
+            let result = results.reduce(function (prev, current) {
                 return prev.thumbs_up + prev.thumbs_down >
                     current.thumbs_up + current.thumbs_down
                     ? prev
@@ -58,23 +62,23 @@ module.exports = {
                 "  👎" +
                 result.thumbs_down;
 
-            await client.deleteMessage(BotsApp.chatId, {
+            await client.deleteMessage(botsApp.chatId, {
                 id: processing.key.id,
-                remoteJid: BotsApp.chatId,
+                remoteJid: botsApp.chatId,
                 fromMe: true,
             });
 
-            await client.sendMessage(BotsApp.chatId, msg, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            await client.sendMessage(botsApp.chatId, msg, MessageType.text).catch(err => inputSanitization.handleError(err, client, botsApp));
         } catch (err) {
             await inputSanitization.handleError(
                 err,
                 client,
-                BotsApp,
+                botsApp,
                 format(STRINGS.ud.NOT_FOUND, text)
             );
-            return await client.deleteMessage(BotsApp.chatId, {
+            return await client.deleteMessage(botsApp.chatId, {
                 id: processing.key.id,
-                remoteJid: BotsApp.chatId,
+                remoteJid: botsApp.chatId,
                 fromMe: true,
             });
         }
