@@ -5,7 +5,7 @@ import config from "../config";
 import Client from "../sidekick/client.js";
 import BotsApp from "../sidekick/sidekick";
 import { MessageType } from "../sidekick/message-type";
-import { AnyMediaMessageContent, AnyMessageContent, proto } from "@adiwajshing/baileys";
+import { proto } from "@adiwajshing/baileys";
 import Command from "../sidekick/command";
 const HELP = Strings.help;
 
@@ -16,54 +16,31 @@ module.exports = {
     demo: {isEnabled: false},
     async handle(client: Client, chat: proto.IWebMessageInfo, BotsApp: BotsApp, args: string[], commandHandler: Map<string, Command>): Promise<void> {
         try {
-            var prefixRegex: any = new RegExp(config.PREFIX, "g");
-            var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
-            let helpMessage: string;
+            const prefixes = config.PREFIX.replace(/[\\^\\\[\\\]]/g, "");
+            const uniqueCommands = Array.from(new Set(commandHandler.values())).sort((a, b) => a.name.localeCompare(b.name));
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
-                    helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
-                });
+                let helpMessage = format(HELP.HEAD, uniqueCommands.length.toString(), prefixes[0]);
+                uniqueCommands.forEach(cmd => helpMessage += format(HELP.TEMPLATE, prefixes[0] + cmd.name, cmd.description));
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            helpMessage = HELP.COMMAND_INTERFACE;
-            var command: Command = commandHandler.get(args[0]);
+            const command = commandHandler.get(args[0]);
             if(command){
-                var triggers: string = " | "
-                prefixes.split("").forEach(prefix => {
-                    triggers += prefix + command.name + " | "
-                });
-
+                const triggers = prefixes.split("").map(p => p + command.name).join(" | ");
+                const extDesc = command.extendedDescription.includes("{}") ? format(command.extendedDescription, prefixes[0]) : command.extendedDescription;
                 if(command.demo?.isEnabled) {
-                    var buttons: proto.Message.ButtonsMessage.IButton[] = [];
-                    helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, command.extendedDescription) + HELP.FOOTER;
-                    if(command.demo.text instanceof Array){
-                        for (var i in command.demo.text){
-                            var button: proto.Message.ButtonsMessage.IButton = {
-                                buttonId: 'id' + i,
-                                buttonText: {displayText: command.demo.text[i]},
-                                type: 1
-                            }
-                            buttons.push(button);
-                        }
-                    }else{
-                        buttons.push({buttonId: 'id1', buttonText: {displayText: command.demo.text}, type: 1});
-                    }
-                    const buttonMessage = {
-                        text: helpMessage,
-                        buttons: buttons,
-                        headerType: 1
-                    }
-                    await client.sendMessage(BotsApp.chatId, buttonMessage, MessageType.buttonsMessage).catch(err => inputSanitization.handleError(err, client, BotsApp))
+                    const buttons = (Array.isArray(command.demo.text) ? command.demo.text : [command.demo.text]).map((text, i) => ({
+                        buttonId: 'id' + i,
+                        buttonText: { displayText: text.includes("{}") ? format(text, prefixes[0]) : text },
+                        type: 1
+                    }));
+                    await client.sendMessage(BotsApp.chatId, { text: format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, extDesc) + HELP.FOOTER, buttons, headerType: 1 }, MessageType.buttonsMessage).catch(err => inputSanitization.handleError(err, client, BotsApp));
                     return;
                 }
-
-                helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, command.extendedDescription);
-                client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+                client.sendMessage(BotsApp.chatId, format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, extDesc), MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + "```Invalid Command. Check the correct name from```  *.help*  ```command list.```", MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            client.sendMessage(BotsApp.chatId, format(HELP.ERROR_MSG, prefixes[0]), MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
         } catch (err) {
             await inputSanitization.handleError(err, client, BotsApp);
         }
