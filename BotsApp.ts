@@ -182,8 +182,9 @@ setInterval(() => {
                             console.log(chalk.redBright.bold(`[INFO] ${BotsApp.commandName} command executed.`));
                             const command = commandHandler.get(BotsApp.commandName);
                             var args = BotsApp.body.trim().split(/\s+/).slice(1);
+                            var prefixes = config.PREFIX.replace(/[\\^\\\[\\\]]/g, "");
                             if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                client.sendMessage(BotsApp.chatId, format(STRINGS.help.ERROR_MSG, prefixes[0]), MessageType.text);
                                 return;
                             } else if (command && BotsApp.commandName == "help") {
                                 try {
