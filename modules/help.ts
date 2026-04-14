@@ -16,12 +16,12 @@ module.exports = {
     demo: {isEnabled: false},
     async handle(client: Client, chat: proto.IWebMessageInfo, BotsApp: BotsApp, args: string[], commandHandler: Map<string, Command>): Promise<void> {
         try {
-            var prefixRegex: any = new RegExp(config.PREFIX, "g");
-            var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
+            const prefixes: string = config.PREFIX.replace(/[\\^\\\[\\\]]/g, "");
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
+                const sortedCommands = Array.from(commandHandler.values()).sort((a, b) => a.name.localeCompare(b.name));
+                helpMessage = format(HELP.HEAD, sortedCommands.length.toString(), prefixes[0]);
+                sortedCommands.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
@@ -30,25 +30,22 @@ module.exports = {
             helpMessage = HELP.COMMAND_INTERFACE;
             var command: Command = commandHandler.get(args[0]);
             if(command){
-                var triggers: string = " | "
-                prefixes.split("").forEach(prefix => {
-                    triggers += prefix + command.name + " | "
-                });
+                var triggers: string = prefixes.split("").map(prefix => prefix + command.name).join(" | ");
 
                 if(command.demo?.isEnabled) {
                     var buttons: proto.Message.ButtonsMessage.IButton[] = [];
-                    helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, command.extendedDescription) + HELP.FOOTER;
+                    helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, format(command.extendedDescription, prefixes[0])) + HELP.FOOTER;
                     if(command.demo.text instanceof Array){
                         for (var i in command.demo.text){
                             var button: proto.Message.ButtonsMessage.IButton = {
                                 buttonId: 'id' + i,
-                                buttonText: {displayText: command.demo.text[i]},
+                                buttonText: {displayText: format(command.demo.text[i], prefixes[0])},
                                 type: 1
                             }
                             buttons.push(button);
                         }
                     }else{
-                        buttons.push({buttonId: 'id1', buttonText: {displayText: command.demo.text}, type: 1});
+                        buttons.push({buttonId: 'id1', buttonText: {displayText: format(command.demo.text, prefixes[0])}, type: 1});
                     }
                     const buttonMessage = {
                         text: helpMessage,
@@ -59,11 +56,11 @@ module.exports = {
                     return;
                 }
 
-                helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, command.extendedDescription);
+                helpMessage += format(HELP.COMMAND_INTERFACE_TEMPLATE, triggers, format(command.extendedDescription, prefixes[0]));
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + "```Invalid Command. Check the correct name from```  *.help*  ```command list.```", MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + format(HELP.ERROR_MSG, prefixes[0]), MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
         } catch (err) {
             await inputSanitization.handleError(err, client, BotsApp);
         }
