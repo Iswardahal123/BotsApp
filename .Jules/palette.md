@@ -1,0 +1,3 @@
+## 2026-04-18 - Improving Scannability and Transparency in Chat Menus
+**Learning:** Alphabetical sorting in chat-based help menus significantly improves scannability, while displaying a total command count provides immediate transparency about the bot's capabilities. Robustly extracting command prefixes and standardizing error messages across the application ensures a consistent and reliable user experience.
+**Action:** Always sort command lists alphabetically by default, include summary metrics in menu headers, and use centralized string definitions for consistent feedback. Ensure prefix extraction is resilient to different regex configurations.
