@@ -1,0 +1,3 @@
+## 2025-05-14 - Scannability and Dynamic Feedback in Chat Interfaces
+**Learning:** In text-based chat interfaces (like WhatsApp bots), scannability is a primary UX challenge. Alphabetical sorting significantly reduces the cognitive load for users searching for specific commands. Additionally, providing dynamic feedback (like "Total Commands") gives users an immediate sense of the bot's scale and capabilities.
+**Action:** Always sort menus or lists in chat interfaces alphabetically unless there's a strong usage-based reason not to. Include summary statistics (counts, versions) to enhance transparency.
