@@ -20,8 +20,9 @@ module.exports = {
             var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
+                helpMessage = format(HELP.HEAD, commandHandler.size.toString());
+                const sortedCommands = Array.from(commandHandler.values()).sort((a, b) => a.name.localeCompare(b.name));
+                sortedCommands.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
@@ -63,7 +64,7 @@ module.exports = {
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
                 return;
             }
-            client.sendMessage(BotsApp.chatId, HELP.COMMAND_INTERFACE + "```Invalid Command. Check the correct name from```  *.help*  ```command list.```", MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
+            client.sendMessage(BotsApp.chatId, format(HELP.ERROR_MSG, HELP.COMMAND_INTERFACE), MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
         } catch (err) {
             await inputSanitization.handleError(err, client, BotsApp);
         }
