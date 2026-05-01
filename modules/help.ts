@@ -16,12 +16,13 @@ module.exports = {
     demo: {isEnabled: false},
     async handle(client: Client, chat: proto.IWebMessageInfo, BotsApp: BotsApp, args: string[], commandHandler: Map<string, Command>): Promise<void> {
         try {
-            var prefixRegex: any = new RegExp(config.PREFIX, "g");
-            var prefixes: string = /\/\^\[(.*)+\]\/\g/g.exec(prefixRegex)[1];
+            const prefixRegex: any = new RegExp(config.PREFIX, "g");
+            const prefixes: string = prefixRegex.source.match(/\[(.*)\]/)?.[1] || prefixRegex.source.replace('^', '');
             let helpMessage: string;
             if(!args[0]){
-                helpMessage = HELP.HEAD;
-                commandHandler.forEach(element => {
+                helpMessage = format(HELP.HEAD, commandHandler.size.toString(), prefixes[0]);
+                const sortedCommands = Array.from(commandHandler.values()).sort((a, b) => a.name.localeCompare(b.name));
+                sortedCommands.forEach(element => {
                     helpMessage += format(HELP.TEMPLATE, prefixes[0] + element.name, element.description);
                 });
                 client.sendMessage(BotsApp.chatId, helpMessage, MessageType.text).catch(err => inputSanitization.handleError(err, client, BotsApp));
