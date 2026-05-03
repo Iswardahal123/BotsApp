@@ -23,6 +23,7 @@ import { MessageType } from './sidekick/message-type'
 
 const sequelize: Sequelize = config.DATABASE;
 const GENERAL: any = STRINGS.general;
+const HELP = STRINGS.help;
 const msgRetryCounterMap: MessageRetryMap = {};
 const logger: Logger = P({ timestamp: () => `,"time":"${new Date().toJSON()}"` }).child({})
 logger.level = 'fatal'
@@ -163,13 +164,19 @@ setInterval(() => {
                         return;
                     }
                     for(const msg of upsert.messages){
-                        let chat: proto.IWebMessageInfo = msg;
-                        let BotsApp: BotsApp = await resolve(chat, sock);
+                        const chat: proto.IWebMessageInfo = msg;
+                        const BotsApp: BotsApp = await resolve(chat, sock);
                         // console.log(BotsApp);
                         if (BotsApp.isCmd) {
-                            let isBlacklist: boolean = await Blacklist.getBlacklistUser(BotsApp.sender, BotsApp.chatId);
+                            const isBlacklist: boolean = await Blacklist.getBlacklistUser(BotsApp.sender, BotsApp.chatId);
                             const cleared: boolean = await clearance(BotsApp, client, isBlacklist);
                             if (!cleared) {
+                                return;
+                            }
+                            const command = commandHandler.get(BotsApp.commandName);
+                            const prefixes = config.PREFIX.match(/\[(.*)\]/)?.[1] || config.PREFIX.replace('^', '');
+                            if (!command) {
+                                client.sendMessage(BotsApp.chatId, format(HELP.ERROR_MSG, prefixes[0]), MessageType.text);
                                 return;
                             }
                             const reactionMessage = {
@@ -180,12 +187,8 @@ setInterval(() => {
                             }
                             await sock.sendMessage(chat.key.remoteJid, reactionMessage);
                             console.log(chalk.redBright.bold(`[INFO] ${BotsApp.commandName} command executed.`));
-                            const command = commandHandler.get(BotsApp.commandName);
-                            var args = BotsApp.body.trim().split(/\s+/).slice(1);
-                            if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
-                                return;
-                            } else if (command && BotsApp.commandName == "help") {
+                            const args = BotsApp.body.trim().split(/\s+/).slice(1);
+                            if (command && BotsApp.commandName == "help") {
                                 try {
                                     command.handle(client, chat, BotsApp, args, commandHandler);
                                     return;

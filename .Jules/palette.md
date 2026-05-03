@@ -1,0 +1,3 @@
+## 2025-05-14 - Scannability and Immediate Feedback in Bot Interfaces
+**Learning:** In chat-based bot interfaces, scannability of the help menu is critical. Sorting commands alphabetically and providing a total count reduces cognitive load. Additionally, providing immediate visual feedback (like a message reaction) when a command is recognized acknowledges the user's intent even before the command finishes processing.
+**Action:** Always sort lists in chat responses alphabetically and implement immediate acknowledgment (reactions or typing indicators) for recognized commands to improve the perceived responsiveness of the bot.
