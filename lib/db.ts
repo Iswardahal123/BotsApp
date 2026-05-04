@@ -149,12 +149,13 @@ const data = {
         DESCRIPTION: "Get the command list and info on modules",
         EXTENDED_DESCRIPTION:
             "This module is used to get info on other modules and their triggers.",
-        HEAD: "🌀 *BotsApp Menu* 🌀\n```Use .help command for detailed info on a module.```",
+        HEAD: "🌀 *BotsApp Menu* 🌀\n\n*Total Commands:* {}\n*Prefix:* {}\n\n```Use {}help command for detailed info on a module.```",
         TEMPLATE: "\n\n🤖 *Command* - ```{}```\n💡 *Info* - ```{}```",
         COMMAND_INTERFACE: "🌀 *BotsApp Command Interface* 🌀\n\n",
         COMMAND_INTERFACE_TEMPLATE: "💠 *Triggers -* ```{}```\n📚 *Info -* {}",
         FOOTER:
             "```\n\nClick on the button below to get a preview of the plugin.```",
+        ERROR_MSG: "```Invalid Command. Check the correct name from```  *{}help*  ```command list.```"
     },
     invite: {
         DESCRIPTION: "Module to create group invite link",
