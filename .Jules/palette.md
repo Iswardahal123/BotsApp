@@ -1,0 +1,3 @@
+## 2025-05-14 - [Improvement of Help Menu Scannability and Command Feedback]
+**Learning:** Alphabetical sorting of command lists significantly improves scannability in chat-based interfaces where visual search is the primary mode of navigation. Providing a total command count in the header offers immediate feedback on the bot's scale. Robust prefix extraction prevents 'placeholder leaks' and incorrect trigger instructions in documentation/help menus.
+**Action:** Always sort dynamic lists alphabetically in chat interfaces. Use dynamic prefix extraction instead of hardcoding trigger characters in help strings to maintain consistency with user configuration. Ensure visual feedback (like reactions) only triggers after input validation to avoid misleading users.

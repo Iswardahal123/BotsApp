@@ -23,6 +23,7 @@ import { MessageType } from './sidekick/message-type'
 
 const sequelize: Sequelize = config.DATABASE;
 const GENERAL: any = STRINGS.general;
+const HELP: any = STRINGS.help;
 const msgRetryCounterMap: MessageRetryMap = {};
 const logger: Logger = P({ timestamp: () => `,"time":"${new Date().toJSON()}"` }).child({})
 logger.level = 'fatal'
@@ -172,6 +173,15 @@ setInterval(() => {
                             if (!cleared) {
                                 return;
                             }
+                            const command = commandHandler.get(BotsApp.commandName);
+                            var args = BotsApp.body.trim().split(/\s+/).slice(1);
+                            if (!command) {
+                                const prefix = config.PREFIX.match(/\[(.*)\]/)?.[1] || config.PREFIX.replace('^', '');
+                                const primaryPrefix = prefix[0] || '.';
+                                client.sendMessage(BotsApp.chatId, format(HELP.ERROR_MSG, primaryPrefix), MessageType.text);
+                                return;
+                            }
+
                             const reactionMessage = {
                                 react: {
                                     text: "🪄",
@@ -180,12 +190,7 @@ setInterval(() => {
                             }
                             await sock.sendMessage(chat.key.remoteJid, reactionMessage);
                             console.log(chalk.redBright.bold(`[INFO] ${BotsApp.commandName} command executed.`));
-                            const command = commandHandler.get(BotsApp.commandName);
-                            var args = BotsApp.body.trim().split(/\s+/).slice(1);
-                            if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
-                                return;
-                            } else if (command && BotsApp.commandName == "help") {
+                            if (command && BotsApp.commandName == "help") {
                                 try {
                                     command.handle(client, chat, BotsApp, args, commandHandler);
                                     return;
