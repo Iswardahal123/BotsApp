@@ -172,6 +172,13 @@ setInterval(() => {
                             if (!cleared) {
                                 return;
                             }
+                            const command = commandHandler.get(BotsApp.commandName);
+                            var args = BotsApp.body.trim().split(/\s+/).slice(1);
+                            if (!command) {
+                                var prefixes: string = config.PREFIX.match(/\[(.*)\]/)?.[1] || config.PREFIX.replace('^', '');
+                                client.sendMessage(BotsApp.chatId, STRINGS.help.COMMAND_INTERFACE + format(STRINGS.help.ERROR_MSG, prefixes[0]), MessageType.text);
+                                return;
+                            }
                             const reactionMessage = {
                                 react: {
                                     text: "🪄",
@@ -180,12 +187,7 @@ setInterval(() => {
                             }
                             await sock.sendMessage(chat.key.remoteJid, reactionMessage);
                             console.log(chalk.redBright.bold(`[INFO] ${BotsApp.commandName} command executed.`));
-                            const command = commandHandler.get(BotsApp.commandName);
-                            var args = BotsApp.body.trim().split(/\s+/).slice(1);
-                            if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
-                                return;
-                            } else if (command && BotsApp.commandName == "help") {
+                            if (command && BotsApp.commandName == "help") {
                                 try {
                                     command.handle(client, chat, BotsApp, args, commandHandler);
                                     return;
