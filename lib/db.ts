@@ -149,7 +149,7 @@ const data = {
         DESCRIPTION: "Get the command list and info on modules",
         EXTENDED_DESCRIPTION:
             "This module is used to get info on other modules and their triggers.",
-        HEAD: "🌀 *BotsApp Menu* 🌀\n```Use .help command for detailed info on a module.```",
+        HEAD: "🌀 *BotsApp Menu* 🌀\n\nTotal Commands: *{}*\nPrefix: *{}*\n\n```Use {}help <command> for detailed info on a module.```",
         TEMPLATE: "\n\n🤖 *Command* - ```{}```\n💡 *Info* - ```{}```",
         COMMAND_INTERFACE: "🌀 *BotsApp Command Interface* 🌀\n\n",
         COMMAND_INTERFACE_TEMPLATE: "💠 *Triggers -* ```{}```\n📚 *Info -* {}",
@@ -413,12 +413,12 @@ const data = {
             "```A goodbye message will be sent when any member leaves the group. It can be an image, video, gif with caption or just a text message.\n\nUse this module to either set, update or delete the existing message.\n\nThe goodbye option can be disabled but saved using the```  *.goodbye  off*  ```command. In order to delete the existing message, use```  *.goodbye  delete*.  ```Do note, the goodbye option is still enabled after you use the delete option.```",
         NOT_A_GROUP: "```This is not a group```",
         SET_GOODBYE_FIRST: "```Set a goodbye message first.```",
-        GREETINGS_ENABLED: "```Goodbye message has been enabled.```",
-        GREETINGS_UNENABLED: "```Goodbye message has been disabled.```",
+        GREETINGS_ENABLED: "```Goodbye messages are enabled.```",
+        GREETINGS_UNENABLED: "```Goodbye messages are disabled.```",
         CURRENTLY_ENABLED:
-            "```Greetings are enabled: True \nCurrently greeting new members with:```",
+            "```Goodbye messages are enabled: True \nCurrently saying goodbye to members with:```",
         CURRENTLY_DISABLED:
-            "```Greetings are enabled: True \nCurrently greeting new members with:```",
+            "```Goodbye messages are enabled: False \nCurrently saying goodbye to members with:```",
         GOODBYE_DELETED: "```Goodbye message deleted.```",
         GOODBYE_UPDATED: "```Goodbye message updated and enabled.```",
     },
