@@ -149,7 +149,7 @@ const data = {
         DESCRIPTION: "Get the command list and info on modules",
         EXTENDED_DESCRIPTION:
             "This module is used to get info on other modules and their triggers.",
-        HEAD: "🌀 *BotsApp Menu* 🌀\n```Use .help command for detailed info on a module.```",
+        HEAD: "🌀 *BotsApp Menu* 🌀\n```Total Commands: {}```\n\n```Use .help command for detailed info on a module.```",
         TEMPLATE: "\n\n🤖 *Command* - ```{}```\n💡 *Info* - ```{}```",
         COMMAND_INTERFACE: "🌀 *BotsApp Command Interface* 🌀\n\n",
         COMMAND_INTERFACE_TEMPLATE: "💠 *Triggers -* ```{}```\n📚 *Info -* {}",
@@ -416,9 +416,9 @@ const data = {
         GREETINGS_ENABLED: "```Goodbye message has been enabled.```",
         GREETINGS_UNENABLED: "```Goodbye message has been disabled.```",
         CURRENTLY_ENABLED:
-            "```Greetings are enabled: True \nCurrently greeting new members with:```",
+            "```Goodbye messages are enabled: True \nCurrently saying goodbye to members with:```",
         CURRENTLY_DISABLED:
-            "```Greetings are enabled: True \nCurrently greeting new members with:```",
+            "```Goodbye messages are enabled: False \nCurrently saying goodbye to members with:```",
         GOODBYE_DELETED: "```Goodbye message deleted.```",
         GOODBYE_UPDATED: "```Goodbye message updated and enabled.```",
     },
