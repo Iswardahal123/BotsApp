@@ -7,6 +7,7 @@ const data = {
         BOT_NOT_ADMIN:
             "```Sorry, don't have permission to do so since I am not an admin.```",
         ADMIN_PERMISSION: "```You need to be an admin to execute this command.```",
+        ERROR_MSG: "```Woops, invalid command! Use```  *{prefix}help*  ```to display the command list.```",
         SUDO_PERMISSION:
             "```Hey there, I am 💠BotsApp💠. I guess you were trying to use my commands in``` *{BotsApp.groupName}*```. However, the bot is currently in {worktype} mode. This enables only the owner and sudo users to use the command``` *{commandName}* ```.\n\nIf you are keen to use my features, you can deploy BotsApp on your own account without much effort, in less than 5 minutes! Check out the links given below.```\n\n🔗https://mybotsapp.com\n🔗https://github.com/Prince-Mendiratta/BotsApp",
         ERROR_TEMPLATE:
@@ -149,8 +150,8 @@ const data = {
         DESCRIPTION: "Get the command list and info on modules",
         EXTENDED_DESCRIPTION:
             "This module is used to get info on other modules and their triggers.",
-        HEAD: "🌀 *BotsApp Menu* 🌀\n```Use .help command for detailed info on a module.```",
-        TEMPLATE: "\n\n🤖 *Command* - ```{}```\n💡 *Info* - ```{}```",
+        HEAD: "🌀 *BotsApp Menu* 🌀\n```Total Commands: {count}```\n\n```Use .help command for detailed info on a module.```",
+        TEMPLATE: "\n\n🤖 *Command* - ```{command}```\n💡 *Info* - ```{info}```",
         COMMAND_INTERFACE: "🌀 *BotsApp Command Interface* 🌀\n\n",
         COMMAND_INTERFACE_TEMPLATE: "💠 *Triggers -* ```{}```\n📚 *Info -* {}",
         FOOTER:
