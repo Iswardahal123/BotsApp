@@ -183,7 +183,7 @@ setInterval(() => {
                             const command = commandHandler.get(BotsApp.commandName);
                             var args = BotsApp.body.trim().split(/\s+/).slice(1);
                             if (!command) {
-                                client.sendMessage(BotsApp.chatId, "```Woops, invalid command! Use```  *.help*  ```to display the command list.```", MessageType.text);
+                                client.sendMessage(BotsApp.chatId, format(GENERAL.ERROR_MSG, {prefix: config.PREFIXES[0]}), MessageType.text);
                                 return;
                             } else if (command && BotsApp.commandName == "help") {
                                 try {
