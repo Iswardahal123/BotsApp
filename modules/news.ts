@@ -34,11 +34,11 @@ module.exports = {
          ********************************************/
         const checkPub = async (newsList: string[], requestedPub: string) => {
             for (let i = 0; i < newsList.length; i++) {
-                if (newsList[i].toUpperCase == requestedPub.toUpperCase) {
+                if (newsList[i].toUpperCase() == requestedPub.toUpperCase()) {
                     return newsList[i];
                 }
-                return;
             }
+            return;
         };
         /*******************************************
          *
